@@ -1,6 +1,5 @@
-#(1) example01
 '''
-This is example about tensor generation.
+one hot encoding example code
 '''
 
 ## no library
