@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 
 EMBEDDING_DIM = 128
-BATCH_SIZE = 100
+EPOCHS = 100
 
 example_sentence = """In the case of CBOW, one word is eliminated, and the word is predicted from surrounding words.
 Therefore, it takes multiple input vectors as inputs to the model and creates one output vector.
@@ -64,7 +64,7 @@ loss_function = nn.NLLLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 
 # training
-for epoch in range(BATCH_SIZE):
+for epoch in range(EPOCHS):
     total_loss = 0
     for context, target in data:
         context_vector = make_context_vector(context, word_to_index)  
