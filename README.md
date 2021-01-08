@@ -11,3 +11,4 @@ Natural Language Processing
 	+ [BoW code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter01/BoW.py)
 	+ [CBOW code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter01/CBOW.py)
 	+ [Skip-Gram code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter01/Skip_Gram.py)
+2. [Natural Language Processing Classification]()
