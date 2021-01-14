@@ -13,3 +13,4 @@ Natural Language Processing
 	+ [Skip-Gram code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter01/Skip_Gram.py)
 2. [Similarity and NLP Tasks](https://blog.naver.com/jaeyoon_95/222206541615)
 	+ [jaccard code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter02/jaccard.py)
+	+ [euclidean code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter02/euclidean.py)
