@@ -21,7 +21,7 @@ TRAIN_INPUT_DATA = 'train_input.npy'
 TRAIN_LABEL_DATA = 'train_label.npy'
 TRAIN_CLEAN_DATA = 'train_clean.csv'
 TEST_INPUT_DATA = 'test_input.npy'
-TEST_LABEL_DATA = 'test_label.npy'
+TEST_ID_DATA = 'test_label.npy'
 TEST_CLEAN_DATA = 'test_clean.csv'
 DATA_CONFIGS = 'data_configs.json'
 MAX_SEQUENCE_LENGTH = 174
@@ -80,19 +80,19 @@ word_to_index = make_vocab(clean_train_reviews)
 #get padded sentence
 padded_train_sentence = text_sequence(clean_train_reviews, word_to_index)
 #prepare saving data
-train_df = pd.DataFrame({"review": clean_train_reviews, 'sentiment': train_data['sentiment']})
+train_df = pd.DataFrame({'review': clean_train_reviews, 'sentiment': train_data['sentiment']})
 train_labels = np.array(train_data['sentiment'])
 
 #### preprocessing test data####
 # load data file
-test_data = pd.read_csv(PATH+'labeledTrainData.tsv/labeledTrainData.tsv',header=0,delimiter='\t',quoting=3)
+test_data = pd.read_csv(PATH+'testData.tsv/testData.tsv',header=0,delimiter='\t',quoting=3)
 # get clean reviews
 clean_test_reviews = clean_reviews(test_data)
 #get padded sentence
 padded_test_sentence = text_sequence(clean_test_reviews, word_to_index)
 #prepare saving data
-test_df = pd.DataFrame({"review": clean_test_reviews, 'sentiment': train_data['sentiment']})
-test_labels = np.array(test_data['sentiment'])
+test_df = pd.DataFrame({"review": clean_test_reviews, "id":test_data["id"]})
+test_id = np.array(test_data['id'])
 
 #### save data ####
 data_configs = {}
@@ -107,7 +107,7 @@ json.dump(data_configs, open(DATA_OUTPUT_PATH + DATA_CONFIGS,'w'),ensure_ascii=F
 np.save(open(DATA_OUTPUT_PATH + TRAIN_INPUT_DATA, 'wb'), padded_train_sentence)
 np.save(open(DATA_OUTPUT_PATH + TRAIN_LABEL_DATA, 'wb'), train_labels)
 np.save(open(DATA_OUTPUT_PATH + TEST_INPUT_DATA, 'wb'), padded_test_sentence)
-np.save(open(DATA_OUTPUT_PATH + TEST_LABEL_DATA, 'wb'), test_labels)
+np.save(open(DATA_OUTPUT_PATH + TEST_ID_DATA, 'wb'), test_id)
 
 train_df.to_csv(DATA_OUTPUT_PATH + TRAIN_CLEAN_DATA, index = False)
 test_df.to_csv(DATA_OUTPUT_PATH + TEST_CLEAN_DATA, index = False)
