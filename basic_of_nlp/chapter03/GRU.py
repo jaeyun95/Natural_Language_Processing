@@ -1,5 +1,5 @@
 """
-logistic regression
+GRU
 """
 import torch
 import torch.nn as nn
@@ -11,7 +11,7 @@ import urllib.request
 import pandas as pd
 from torchtext.data import Iterator
 
-PATH = './data'
+PATH = './'
 TEXT = data.Field(sequential=True, use_vocab=True, tokenize=str.split, lower=True, batch_first=True, fix_length=20)
 LABEL = data.Field(sequential=False, use_vocab=False, batch_first=False, is_target=True)
 train_data, test_data = TabularDataset.splits(
@@ -23,19 +23,32 @@ train_loader = Iterator(dataset=train_data, batch_size = 5)
 test_loader = Iterator(dataset=test_data, batch_size = 5)
 batch = next(iter(train_loader))
 
-class LogisticRegression(nn.Module):
-    def __init__(self, input_dim, output_dim):
-        super(LogisticRegression,self).__init__()
-        self.input_dim = input_dim
-        self.output_dim = output_dim
-        self.fc1 = nn.Linear(self.input_dim, self.output_dim)
-        
-    def forward(self, input_data):
-        x = input_data.type(torch.FloatTensor)
-        x = self.fc1(x)
-        x = F.relu(x)
-        prob = F.softmax(x)
+class GRU(nn.Module):
+    def __init__(self, n_layers, hidden_dim, n_vocab, embed_dim, n_classes, dropout_p=0.2):
+        super(GRU, self).__init__()
+        self.n_layers = n_layers
+        self.hidden_dim = hidden_dim
+
+        self.embed = nn.Embedding(n_vocab, embed_dim)
+        self.dropout = nn.Dropout(dropout_p)
+        self.gru = nn.GRU(embed_dim, self.hidden_dim,
+                          num_layers=self.n_layers,
+                          batch_first=True)
+        self.out = nn.Linear(self.hidden_dim, n_classes)
+
+    def forward(self, x):
+        x = self.embed(x)
+        h_0 = self._init_state(batch_size=x.size(0)) 
+        x, _ = self.gru(x, h_0) 
+        h_t = x[:,-1,:] 
+        self.dropout(h_t)
+        logit = self.out(h_t)  
+        prob = F.softmax(logit)
         return prob
+    
+    def _init_state(self, batch_size=1):
+        weight = next(self.parameters()).data
+        return weight.new(self.n_layers, batch_size, self.hidden_dim).zero_()
     
 def train(model, train_loader, optimizer):
     model.train()
@@ -59,7 +72,7 @@ def evaluate(model, test_data):
     avg_accuracy = 100.0 * corrects / size
     return avg_loss, avg_accuracy
 
-model = LogisticRegression(input_dim=20,output_dim=2)
+model = GRU(1,256,len(TEXT.vocab),128, 2, 0.5)
 optimizer = optim.SGD(model.parameters(),lr=0.01)
 
 for epoch in range(0,30):

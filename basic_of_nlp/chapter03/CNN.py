@@ -1,5 +1,5 @@
 """
-logistic regression
+CNN
 """
 import torch
 import torch.nn as nn
@@ -11,7 +11,7 @@ import urllib.request
 import pandas as pd
 from torchtext.data import Iterator
 
-PATH = './data'
+PATH = './'
 TEXT = data.Field(sequential=True, use_vocab=True, tokenize=str.split, lower=True, batch_first=True, fix_length=20)
 LABEL = data.Field(sequential=False, use_vocab=False, batch_first=False, is_target=True)
 train_data, test_data = TabularDataset.splits(
@@ -23,17 +23,26 @@ train_loader = Iterator(dataset=train_data, batch_size = 5)
 test_loader = Iterator(dataset=test_data, batch_size = 5)
 batch = next(iter(train_loader))
 
-class LogisticRegression(nn.Module):
-    def __init__(self, input_dim, output_dim):
-        super(LogisticRegression,self).__init__()
+class CNN(nn.Module):
+    def __init__(self, input_dim, output_dim, n_vocab, embed_dim, dropout_p=0.2):
+        super(CNN, self).__init__()
         self.input_dim = input_dim
         self.output_dim = output_dim
-        self.fc1 = nn.Linear(self.input_dim, self.output_dim)
+        self.embed = nn.Embedding(n_vocab, embed_dim)
+        self.conv1 = nn.Conv1d(self.input_dim,self.input_dim//2,kernel_size=2)
+        self.pool = nn.MaxPool1d(4)
+        self.drop = nn.Dropout(dropout_p)
+        self.fc1 = nn.Linear(630,256)
+        self.fc2 = nn.Linear(256,self.output_dim)
         
-    def forward(self, input_data):
-        x = input_data.type(torch.FloatTensor)
-        x = self.fc1(x)
-        x = F.relu(x)
+    def forward(self, x):
+        x = self.embed(x)
+        x = F.relu(self.pool(self.conv1(x)))
+        x = self.drop(x)
+        x = x.view(x.shape[0],-1)
+        x = F.relu(self.fc1(x))
+        x= self.drop(x)
+        x = F.relu(self.fc2(x))
         prob = F.softmax(x)
         return prob
     
@@ -59,7 +68,7 @@ def evaluate(model, test_data):
     avg_accuracy = 100.0 * corrects / size
     return avg_loss, avg_accuracy
 
-model = LogisticRegression(input_dim=20,output_dim=2)
+model = CNN(20,2,len(TEXT.vocab),128)
 optimizer = optim.SGD(model.parameters(),lr=0.01)
 
 for epoch in range(0,30):

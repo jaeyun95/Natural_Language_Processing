@@ -16,5 +16,7 @@ Natural Language Processing
 	+ [euclidean code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter02/euclidean.py)
 	+ [manhattan code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter02/manhattan.py)
 	+ [cosine code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter02/cosine.py)
-3. [English Text Classification](https://blog.naver.com/jaeyoon_95/222216743840) [[Code Explanation]()]
-	+ [preprocessing code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter03/preprocessing.py)
+3. [English Text Classification](https://blog.naver.com/jaeyoon_95/222216743840) [[Code Explanation](https://blog.naver.com/jaeyoon_95/222326251633)]
+	+ [Logistic Regression code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter03/logistic_regression.py)
+	+ [GRU code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter03/GRU.py)
+	+ [CNN code](https://github.com/jaeyun95/Natural_Language_Processing/blob/master/basic_of_nlp/chapter03/CNN.py)
